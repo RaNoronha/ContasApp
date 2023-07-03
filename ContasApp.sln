@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContasApp.Presentation", "ContasApp.Presentation\ContasApp.Presentation.csproj", "{89B70534-6D61-461E-9091-2E776AF228FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContasApp.Presentation", "ContasApp.Presentation\ContasApp.Presentation.csproj", "{89B70534-6D61-461E-9091-2E776AF228FA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Presentation Layer", "1 - Presentation Layer", "{B5303ACD-18F9-4279-B8E3-234FEDAC00CF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Data Acess Layer", "2 - Data Acess Layer", "{D62ADFCD-396C-414E-B24F-7017B5F6D435}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,6 +22,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{89B70534-6D61-461E-9091-2E776AF228FA} = {B5303ACD-18F9-4279-B8E3-234FEDAC00CF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B7D7F5EA-7535-438D-B31B-15EEF61AC973}
