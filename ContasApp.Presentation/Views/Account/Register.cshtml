@@ -1,4 +1,6 @@
-﻿@{
+﻿@model ContasApp.Presentation.Models.AccountRegisterViewModel
+
+@{
     Layout = "~/Views/Shared/_AccountLayout.cshtml";
 }
 
@@ -8,33 +10,51 @@
     <hr/>
 </div>
 
-<form>
+@using(Html.BeginForm())
+{
+        <div class="mb-2 text-center">
+            <strong>@TempData["Mensagem"]</strong>
+        </div>
+
     <div class="mb-2">
         <label>Informe seu nome completo</label>
-        <input type="text" class="form-control" placeholder="Ex: André Matos" />
+        @Html.TextBoxFor(model => model.Nome, new{@class="form-control", @placeholder="Ex: André Matos"})
+        <span class="text-danger">
+            @Html.ValidationMessageFor(model => model.Nome)
+        </span>
     </div>
 
     <div class="mb-2">
         <label>Informe seu email</label>
-        <input type="text" class="form-control" placeholder="Ex: andrmatos@gmail.com" />
+        @Html.TextBoxFor(model => model.Email, new { @class="form-control", @placeholder="Ex: andrematos@gmail.com"})
+        <span class="text-danger">
+            @Html.ValidationMessageFor(model => model.Email)
+        </span>
     </div>
 
    <div class="mb-2">
         <label>Informe sua senha</label>
-        <input type="password" class="form-control"/>
+        @Html.PasswordFor(model => model.Senha, new {@class="form-control"})
+        <span class="text-danger">
+            @Html.ValidationMessageFor(model => model.Senha)
+        </span>
+
     </div>
 
     <div class="mb-2">
         <label>Confirme sua senha</label>
-        <input type="password" class="form-control"/>
+        @Html.PasswordFor(model => model.SenhaConfirma, new {@class="form-control"})
+        <span class="text-danger">
+           @Html.ValidationMessageFor(model => model.SenhaConfirma)
+        </span>
     </div>
 
     <div class="mb-2 d-grid">
-        <input type="submit" class="btn btn-primary" value="Realizar Cadastro"/>
+       <input type="submit" class="btn btn-primary" value="Realizar Cadastro"/>
     </div>
 
     <div class="mb-2 text-center">
         Já possui conta?
         <a href="/Account/Login">Acesse aqui!</a>
     </div>
-</form>
+}
