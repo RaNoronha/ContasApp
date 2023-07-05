@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContasApp.Presentation", "C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Presentation Layer", "1 - Presentation Layer", "{B5303ACD-18F9-4279-B8E3-234FEDAC00CF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Data Acess Layer", "2 - Data Acess Layer", "{D62ADFCD-396C-414E-B24F-7017B5F6D435}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Data Access Layer", "2 - Data Access Layer", "{D62ADFCD-396C-414E-B24F-7017B5F6D435}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContasApp.Data", "ContasApp.Data\ContasApp.Data.csproj", "{F2F656C3-A960-459F-83A7-CC0BD080F645}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,12 +21,17 @@ Global
 		{89B70534-6D61-461E-9091-2E776AF228FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89B70534-6D61-461E-9091-2E776AF228FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89B70534-6D61-461E-9091-2E776AF228FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2F656C3-A960-459F-83A7-CC0BD080F645}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2F656C3-A960-459F-83A7-CC0BD080F645}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2F656C3-A960-459F-83A7-CC0BD080F645}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2F656C3-A960-459F-83A7-CC0BD080F645}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{89B70534-6D61-461E-9091-2E776AF228FA} = {B5303ACD-18F9-4279-B8E3-234FEDAC00CF}
+		{F2F656C3-A960-459F-83A7-CC0BD080F645} = {D62ADFCD-396C-414E-B24F-7017B5F6D435}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B7D7F5EA-7535-438D-B31B-15EEF61AC973}
