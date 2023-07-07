@@ -1,0 +1,59 @@
+﻿@{Layout = "~/Views/Shared/_AdminLayout.cshtml";}
+
+<h5>Consulta das contas</h5>
+<p>Faça o consulta da contas</p>
+<hr/>
+
+<form>
+    <div class="row mb-2">
+
+        <div class="col">
+            <label>Data Inicial:</label>
+            <input type="date" class="form-control"/> 
+        </div>
+
+        <div class="col">
+            <label>Data Final:</label>
+            <input type="date" class="form-control"/> 
+        </div>
+
+        <div class="col">
+            <div>
+                <label></label>
+                <input type="checkbox" checked/>Contas a receber
+            </div>
+            
+            <div>
+                <input type="checkbox" checked/>Contas a pagar
+            </div>
+        </div>
+
+        <div class="col">
+            <input type="submit" class="btn btn-success" value="Pesquisar Contas"/>
+        </div>
+    </div>
+
+    <div class="table-responsive mb-2">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Valor</th>
+                    <th>Tipo</th>
+                    <th>Nome da Conta</th>
+                    <th>Categoria</th>
+                    <th>Operações</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6">
+                        Quantidade Contas Obtidas: 0
+                    </tdc>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</form>

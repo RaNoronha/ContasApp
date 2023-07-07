@@ -14,6 +14,32 @@ namespace ContasApp.Presentation.Controllers
             return View();
         }
 
+        [HttpPost]
+        public IActionResult Login(AccountLoginViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                try
+                {
+                    var usuariorepository = new UsuarioRepository();
+
+                    if(usuariorepository.PesquisaEmaileSenha(model.Email, model.Senha) != null)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        TempData["Mensagem"] = "ACESSO NEGADO!! Email e/ou Senha inválidos";
+                    }
+                }
+                catch(Exception e)
+                {
+                    TempData["Mensagem"] = e.Message;
+                }
+            }
+            return View();
+        }
+
         #endregion
 
         #region Método da view Register
@@ -31,17 +57,23 @@ namespace ContasApp.Presentation.Controllers
                 try
                 {
                     var usuario = new Usuario();
-
-                    usuario.Id = Guid.NewGuid();
-                    usuario.Nome = model.Nome;
-                    usuario.Email = model.Email;
-                    usuario.Senha = model.Senha;
-                    usuario.DataHoraCriacao = DateTime.Now;
-
                     var usuariorepository = new UsuarioRepository();
-                    usuariorepository.Cadastrar(usuario);
+                    if(usuariorepository.PesquisaEmail(model.Email) != null)
+                    {
+                        TempData["Mensagem"] = "Email já cadastrado!!";
+                    }
+                    else
+                    {
+                        usuario.Id = Guid.NewGuid();
+                        usuario.Nome = model.Nome;
+                        usuario.Email = model.Email;
+                        usuario.Senha = model.Senha;
+                        usuario.DataHoraCriacao = DateTime.Now;
 
-                    TempData["Mensagem"] = "Parabéns, sua conta de usuário foi cadastrada com sucesso!";
+                        usuariorepository.Cadastrar(usuario);
+
+                        TempData["Mensagem"] = "Parabéns, sua conta de usuário foi cadastrada com sucesso!";
+                    }
                 }
                 catch(Exception e)
                 {

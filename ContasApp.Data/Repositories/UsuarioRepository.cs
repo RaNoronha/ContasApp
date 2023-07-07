@@ -24,7 +24,7 @@ namespace ContasApp.Data.Repositories
                 @Id,
                 @Nome,
                 @Email,
-                @Senha,
+                CONVERT(VARCHAR(32), HASHBYTES('MD5', @Senha), 2),
                 @DataHoraCriacao)
             ";
 
@@ -40,7 +40,6 @@ namespace ContasApp.Data.Repositories
                 UPDATE USUARIO SET
                     NOME = @Nome,
                     EMAIL = @Email,
-                    SENHA = @Senha
                 WHERE
                     ID = @Id
             ";
@@ -48,6 +47,19 @@ namespace ContasApp.Data.Repositories
             using (var conexao = new SqlConnection(SqlServerSettings.ConnectionSql()))
             {
                 conexao.Execute(query, usuario);
+            }
+        }
+
+        public void Atualizar(Guid id, string senha)
+        {
+            var query = @"
+                UPDATE USUARIO SET
+                    SENHA = CONVERT(VARCHAR(32), HASHBYTES('MD5', @Senha), 2)
+                WHERE ID = @Id";
+
+            using(var conexao = new SqlConnection(SqlServerSettings.ConnectionSql()))
+            {
+                conexao.Execute(query, new { @Id = id, @Senha = senha });
             }
         }
 
@@ -71,25 +83,25 @@ namespace ContasApp.Data.Repositories
 
             using (var conexao = new SqlConnection(SqlServerSettings.ConnectionSql()))
             {
-                return conexao.Query<Usuario>(query, new { @Id = id }).FirstOrDefault();
+                return conexao.Query<Usuario>(query, new {@Id = id}).FirstOrDefault();
             }
         }
 
         public Usuario? PesquisaEmail(string email)
         {
             var query = @"
-                SELECT * USARIO WHERE EMAIL = @Email";
+                SELECT * FROM USUARIO WHERE EMAIL = @Email";
 
             using(var conexao = new SqlConnection(SqlServerSettings.ConnectionSql()))
             {
-                return conexao.Query<Usuario>(query, new { @Email = email }).FirstOrDefault();
+                return conexao.Query<Usuario>(query, new {@Email = email}).FirstOrDefault();
             }
         }
 
         public Usuario? PesquisaEmaileSenha(string email, string senha)
         {
             var query = @"
-                SELECT * FROM USUARIO WHERE EMAIL = @Email AND SENHA = @Senha
+                SELECT * FROM USUARIO WHERE EMAIL = @Email AND SENHA = CONVERT(VARCHAR(32), HASHBYTES('MD5', @Senha), 2)
             ";
 
             using(var conexao = new SqlConnection(SqlServerSettings.ConnectionSql()))
