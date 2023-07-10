@@ -18,7 +18,7 @@ namespace ContasApp.Data.Entities
 
         #endregion
 
-        #region Set e Get
+        #region Sets e Gets
 
         public Guid Id { get => _id; set => _id = value; }
         public string? Nome { get => _nome; set => _nome = value; }

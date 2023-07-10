@@ -1,7 +1,11 @@
 ﻿using ContasApp.Data.Entities;
 using ContasApp.Data.Repositories;
 using ContasApp.Presentation.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace ContasApp.Presentation.Controllers
 {
@@ -25,6 +29,12 @@ namespace ContasApp.Presentation.Controllers
 
                     if(usuariorepository.PesquisaEmaileSenha(model.Email, model.Senha) != null)
                     {
+                        var json = JsonConvert.SerializeObject(usuariorepository.PesquisaEmaileSenha(model.Email, model.Senha));
+                        var claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, json) },
+                            CookieAuthenticationDefaults.AuthenticationScheme);
+                        var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                        HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+
                         return RedirectToAction("Index", "Home");
                     }
                     else
@@ -93,6 +103,16 @@ namespace ContasApp.Presentation.Controllers
             return View();
         }
 
+        #endregion
+
+        #region Logout
+
+        public IActionResult Logout()
+        {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction("Login");
+        }
         #endregion
 
     }
