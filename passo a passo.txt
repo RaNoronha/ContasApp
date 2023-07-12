@@ -1,0 +1,15 @@
+- Criação das entidades
+
+- Criação dos bancos de dados
+
+- Criação do caminho de acesso do BD
+
+- Criação do CRUD
+
+- Criação dos controllers
+
+- Criação das views
+
+- Criação das models
+
+- Autenticação e Autorização de cookie

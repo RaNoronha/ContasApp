@@ -57,7 +57,7 @@ namespace ContasApp.Data.Repositories
             }
         }
 
-        public List<Conta> PesquisarDataUsuario(DateTime dtinicio, DateTime dtfim, Guid id)
+        public List<Conta> PesquisarDataUsuario(DateTime? dtinicio, DateTime? dtfim, Guid id)
         {
             var query = @"
                 SELECT * FROM CONTA WHERE
