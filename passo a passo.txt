@@ -1,3 +1,5 @@
+- Desenhar a UML
+
 - Criação das entidades
 
 - Criação dos bancos de dados
@@ -6,10 +8,10 @@
 
 - Criação do CRUD
 
-- Criação dos controllers
+- Criação e configuração dos controllers
 
-- Criação das views
+- Criação e configuração das views
 
-- Criação das models
+- Criação e configuração das models
 
 - Autenticação e Autorização de cookie

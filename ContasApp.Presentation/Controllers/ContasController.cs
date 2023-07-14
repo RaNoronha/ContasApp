@@ -65,7 +65,27 @@ namespace ContasApp.Presentation.Controllers
 
         public IActionResult Consulta()
         {
-            return View();
+            var model = new ContasConsultaViewModel();
+
+            try
+            {
+                var ultimoDiaDoMes = DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month);
+
+                model.DataInicio = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+                model.DataFim = new DateTime(DateTime.Today.Year, DateTime.Today.Month, ultimoDiaDoMes);
+
+                var usuario = JsonConvert.DeserializeObject<Usuario>(User.Identity.Name);
+
+                var contarepository = new ContaRepository();
+
+                ViewBag.Contas = contarepository.PesquisarDataUsuario(model.DataInicio.Value, model.DataFim.Value, usuario.Id);
+            }
+            catch(Exception e)
+            {
+                TempData["MenssagemErro"] = e.Message;
+            }
+
+            return View(model);
         }
 
         [HttpPost]
@@ -103,11 +123,95 @@ namespace ContasApp.Presentation.Controllers
 
         #region Edição
 
-        public IActionResult Edicao()
+        public IActionResult Edicao(Guid id)
         {
-            return View();
+            var model = new ContasEdicaoViewModel();
+            var contaRepository = new ContaRepository();
+            var conta = contaRepository.PesquisaId(id);
+
+            try
+            {               
+                model.Id = conta.Id;
+                model.Nome = conta.Nome;
+                model.Data = conta.Data;
+                model.Valor = conta.Valor;
+                model.Tipo = conta.Tipo;
+                model.Observacoes = conta.Observacoes;
+                model.CategoriaId = conta.CategoriaId;
+
+                ViewBag.Categorias = ObterCategorias();
+            }
+            catch(Exception e)
+            {
+                TempData["MenssagemErro"] = e.Message;
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edicao(ContasEdicaoViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var conta = new Conta();
+                    var contarepository = new ContaRepository();
+                    var usuario = JsonConvert.DeserializeObject<Usuario>(User.Identity.Name);
+
+                    conta.Id = model.Id;
+                    conta.Nome = model.Nome;
+                    conta.Tipo = model.Tipo.Value;
+                    conta.Valor = model.Valor.Value;
+                    conta.Data = model.Data;
+                    conta.Observacoes = model.Observacoes;
+                    conta.CategoriaId = model.CategoriaId.Value;
+                    conta.UsuarioId = usuario.Id;
+
+                    contarepository.Alterar(conta);
+
+                    TempData["Sucesso"] = "CONTA ALTERADA COM SUCESSO!!!";
+                    
+                }
+                catch (Exception e)
+                {
+                    TempData["MensagemErro"] = e.Message;
+                }
+            }
+            else
+            {
+                TempData["MensagemAlerta"] = "Ocorreram erros no preenchimento do formulário de cadastro, por favor verifique.";
+            }
+
+            ViewBag.Categorias = ObterCategorias();
+
+            return RedirectToAction("Consulta");
         }
         #endregion
+
+        #region Exclusão
+
+        public IActionResult Exclusao(Guid id)
+        {
+            try
+            {
+                var contarepository = new ContaRepository();
+                var conta = contarepository.PesquisaId(id);
+                contarepository.Apagar(conta);
+
+                TempData["Sucesso"] = $"'{conta.Nome}', excluído com sucesso.";
+            }
+            catch (Exception e)
+            {
+                TempData["MenssagemErro"] = e.Message;
+            }
+            return RedirectToAction("Consulta");
+        }
+
+        #endregion
+
+        #region Categorias
 
         private List<SelectListItem> ObterCategorias()
         {
@@ -115,12 +219,15 @@ namespace ContasApp.Presentation.Controllers
             var categoriarepository = new CategoriaRepository();
             var categorias = categoriarepository.TodasCategorias();
 
-            foreach(var item in categorias)
+            foreach (var item in categorias)
             {
-                lista.Add(new SelectListItem {Value = item.Id.ToString(), Text = item.Descricao});
+                lista.Add(new SelectListItem { Value = item.Id.ToString(), Text = item.Descricao });
             }
 
             return lista;
         }
+
+        #endregion
+
     }
 }

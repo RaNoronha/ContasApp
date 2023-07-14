@@ -14,7 +14,7 @@
 
         <div class="col">
             <label>Data Inicial:</label>
-            @Html.TextBoxFor(model => model.DataInicio, new{@type="date", @class="form-control"})
+            @Html.TextBoxFor(model => model.DataInicio, "{0:yyyy-MM-dd}", new{@type="date", @class="form-control"})
             <span class="text-danger">
                 @Html.ValidationMessageFor(model => model.DataInicio)
             </span>
@@ -22,21 +22,14 @@
 
         <div class="col">
             <label>Data Final:</label>
-            @Html.TextBoxFor(model => model.DataFim, new{@type="date", @class="form-control"})
+            @Html.TextBoxFor(model => model.DataFim, "{0:yyyy-MM-dd}", new{@type="date", @class="form-control"})
             <span class="text-danger">
                 @Html.ValidationMessageFor(model => model.DataFim)
             </span>
         </div>
 
         <div class="col">
-            <div>
-                <label></label>
-                <input type="checkbox" checked/>Contas a receber
-            </div>
             
-            <div>
-                <input type="checkbox" checked/>Contas a pagar
-            </div>
         </div>
 
         <div class="col">
@@ -47,7 +40,7 @@
     @if (ViewBag.Contas != null && ViewBag.Contas.Count > 0)
     {
         <div class="table-responsive mb-2">
-            <table class="table table-sm">
+            <table class="table table-sm datatable">
                 <thead>
                     <tr>
                         <th>Data</th>
@@ -77,8 +70,8 @@
                             <td>@item.Nome</td>
                             <td></td>
                             <td>
-                                <button class="btn btn-sm btn-primary">Editar</button>
-                                <button class="btn btn-sm btn-danger">Excluir</button>
+                                <a href="/Contas/Edicao/@item.Id" onclick = "return confirm('Deseja relamente editar esta conta?');" class="btn btn-sm btn-outline-primary">Editar</a>
+                                <a href="/Contas/Exclusao/@item.Id" onclick = "return confirm('Deseja relamente excluir esta conta?');" class="btn btn-sm btn-outline-danger">Excluir</a>
                             </td>
                         </tr>
                     }
