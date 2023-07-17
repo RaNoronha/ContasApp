@@ -1,5 +1,6 @@
 ﻿using ContasApp.Data.Entities;
 using ContasApp.Data.Repositories;
+using ContasApp.Presentation.Helpers;
 using ContasApp.Presentation.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -100,6 +101,54 @@ namespace ContasApp.Presentation.Controllers
 
         public IActionResult ForgotPassword()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ForgotPassword(AccountForgotPasswordViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                try
+                {
+                    var usuarioRepository = new UsuarioRepository();
+                    var usuario = usuarioRepository.PesquisaEmail(model.Email);
+
+                    if (usuario != null)
+                    {
+                        var novaSenha = PasswordHelper.GeneratePassword();
+                        var subject = "Recuperação de senha de usuário - ContasApp";
+                        var body = $@"
+                            <div style='padding: 40px; margin: 40px; border: 1px solid #ccc; text-align: center;'>
+                                <img src='https://www.cotiinformatica.com.br/imagens/logo-coti-informatica.png'/>
+                                <hr/>
+                                <h5>Olá {usuario.Nome}</h5>
+                                <p>Uma nova senha de acesso foi gerada para você.</p>
+                                <p>Acesse o sistema com a senha: {novaSenha}</p>
+                                <br/>
+                                <p>Att, equipe COTI Informática</p>
+                            </div>
+                        ";
+
+                        EmailMessageHelper.EnvioEmail(usuario.Email, subject, body);
+
+                        usuarioRepository.Atualizar(usuario.Id, novaSenha);
+
+                        TempData["Menssagem"] = "Email de recuperação de senha enviado";
+
+                        ModelState.Clear();
+
+                    }
+                    else
+                    {
+                        TempData["Mensagem"] = "Usuário não encontrado!!";
+                    }
+                }
+                catch(Exception e)
+                {
+                    TempData["Mensagem"] = e.Message;
+                }
+            }
             return View();
         }
 
