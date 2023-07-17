@@ -60,14 +60,17 @@ namespace ContasApp.Data.Repositories
         public List<Conta> PesquisarDataUsuario(DateTime? dtinicio, DateTime? dtfim, Guid id)
         {
             var query = @"
-                SELECT * FROM CONTA WHERE
+                SELECT * FROM CONTA co
+                INNER JOIN CATEGORIA ca
+                ON co.CATEGORIAID = ca.ID
+                WHERE
                     USUARIOID = @UsuarioId
                 AND DATA BETWEEN @dtinicio AND @dtfim
                 ORDER BY DATA DESC";
 
             using(var conexao = new SqlConnection(SqlServerSettings.ConnectionSql()))
             {
-                return conexao.Query<Conta>(query, new { @UsuarioId = id, @dtinicio = dtinicio, @dtfim = dtfim }).ToList();
+                return conexao.Query (query, (Conta co, Categoria ca) => { co.Categoria = ca; return co; }, new { @UsuarioId = id, @dtinicio = dtinicio, @dtfim = dtfim }, splitOn:"CategoriaId").ToList();
             }
         }
 
