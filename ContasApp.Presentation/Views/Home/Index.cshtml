@@ -1,8 +1,27 @@
 ﻿@{Layout = "~/Views/Shared/_AdminLayout.cshtml";}
 
+@model ContasApp.Presentation.Models.DashboardViewModel
+
 <h5 class="text-center">Seja bem vindo ao sistema!</h5>
 <p class="text-center">Resumo financeiro do mês de Julho/2023</p>
-<hr />
+
+@using (Html.BeginForm())
+{
+    <div class="row mb-2">
+        <div class="col-md-2">
+            @Html.DropDownListFor(model => model.mes, ViewBag.Meses as List<SelectListItem>, new { @class = "form-select" })
+        </div>
+
+        <div class="col-md-2">
+            @Html.DropDownListFor(model => model.ano, ViewBag.Anos as List<SelectListItem>,new { @class = "form-select" })
+        </div>
+
+        <div class="col-md-8">
+            <input type="submit" class="btn btn-primary" value="Aplicar filtro"/>
+        </div>
+    </div>
+}
+
 
 <div class="row mb-5">
     <div class="col">
