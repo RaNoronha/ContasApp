@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ContasApp.Presentation.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -9,9 +10,14 @@ namespace ContasApp.Presentation.Controllers
         [Authorize]
         public IActionResult Index()
         {
+            var model = new DashboardViewModel();
+            model.mes = DateTime.Now.Month;
+            model.ano = DateTime.Now.Year;
+
             ViewBag.Meses = ObterMeses();
             ViewBag.Anos = ObterAnos();
-            return View();
+
+            return View(model);
         }
 
         private List<SelectListItem> ObterMeses()
