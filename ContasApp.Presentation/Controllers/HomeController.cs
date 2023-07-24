@@ -1,7 +1,10 @@
-﻿using ContasApp.Presentation.Models;
+﻿using ContasApp.Data.Entities;
+using ContasApp.Data.Repositories;
+using ContasApp.Presentation.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 
 namespace ContasApp.Presentation.Controllers
 {
@@ -14,8 +17,17 @@ namespace ContasApp.Presentation.Controllers
             model.mes = DateTime.Now.Month;
             model.ano = DateTime.Now.Year;
 
-            ViewBag.Meses = ObterMeses();
-            ViewBag.Anos = ObterAnos();
+            try
+            {
+                ViewBag.Meses = ObterMeses();
+                ViewBag.Anos = ObterAnos();
+                ViewBag.ReceitasEDespesas = ObterReceitasEDespesas(model.mes.Value, model.ano.Value);
+            }
+            catch(Exception e)
+            {
+                TempData["MensagemErro"] = e.Message;
+            }
+            
 
             return View(model);
         }
@@ -52,6 +64,24 @@ namespace ContasApp.Presentation.Controllers
 
             return lista;
         }
-    }
 
+        private List<object> ObterReceitasEDespesas(int mes, int ano)
+        {
+            var usuario = JsonConvert.DeserializeObject<Usuario>(User.Identity.Name);
+            var contarepository = new ContaRepository();
+            
+            var qtdDiasMes = DateTime.DaysInMonth(ano, mes);
+            var dataInicio = new DateTime(ano, mes, 1);
+            var dataFim = new DateTime(ano, mes, qtdDiasMes);
+
+            var contas = contarepository.PesquisarDataUsuario(dataInicio, dataFim, usuario.Id);
+
+            var lista = new List<object>();
+
+            lista.Add(new { Nome = "Total de Contas a Receber", Valor = contas.Where(c => c.Tipo == 1).Sum(c => c.Valor) });
+            lista.Add(new { Nome = "Total de Contas a Pagar", Valor = contas.Where(c => c.Tipo == 2).Sum(c => c.Valor) });
+
+            return lista;
+        }
+    }
 }

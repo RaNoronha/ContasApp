@@ -33,16 +33,18 @@
 </div>
 
 @section scripts 
-{
+{   
+    <script>
+        const dadosPizza = [];
+        </script>
+    @foreach (var item in ViewBag.ReceitasEDespesas)
+    {
+                    <script>
+                        dadosPizza.push(['@item.Nome', @item.Valor]);
+                    </script>
+    }
         <script>
 
-            // Dados para o gráfico de pizza
-            const dadosPizza = [
-                ['Contas a Receber', 5000],
-                ['Contas a Pagar', 3000]
-            ];
-
-            // Dados para o gráfico de barras
             const dadosBarras = [
                 { categoria: 'Alimentação', valor: 1500 },
                 { categoria: 'Transporte', valor: 1000 },
