@@ -36,22 +36,22 @@
 {   
     <script>
         const dadosPizza = [];
-        </script>
+        const dadosBarras = [];
+    </script>
     @foreach (var item in ViewBag.ReceitasEDespesas)
     {
-                    <script>
-                        dadosPizza.push(['@item.Nome', @item.Valor]);
-                    </script>
-    }
         <script>
+            dadosPizza.push(['@item.Nome', @item.Valor]);
+        </script>
+    }
 
-            const dadosBarras = [
-                { categoria: 'Alimentação', valor: 1500 },
-                { categoria: 'Transporte', valor: 1000 },
-                { categoria: 'Educação', valor: 800 },
-                { categoria: 'Saúde', valor: 1200 }
-            ];
-
+    @foreach (var item in ViewBag.TotalCategorias)
+    {
+        <script>
+            dadosBarras.push({ categoria: '@item.Categoria', valor: parseFloat(@item.Total)});
+        </Script>        
+    }
+    <script>
             // Cores para os dados
             const coresPizza = ['#5cb85c', '#d9534f'];
             const coresBarras = ['#FFA500', '#008000', '#0000FF', '#800080'];
@@ -70,9 +70,14 @@
                 }],
                 plotOptions: {
                     pie: {
-                        colors: coresPizza
-                    }
-                }
+                        colors: coresPizza,
+                        innerSize: '50%',
+                        showInLegend: true,
+                        dataLabels: {
+                        enabled: false
+                    },
+                  }
+                },
             };
 
             // Configurações do gráfico de barras
@@ -95,11 +100,7 @@
                     name: 'Valor',
                     data: dadosBarras.map(item => item.valor)
                 }],
-                plotOptions: {
-                    bar: {
-                        colors: coresBarras
-                    }
-                }
+               
             };
 
             // Renderizar os gráficos

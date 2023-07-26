@@ -10,6 +10,7 @@ namespace ContasApp.Presentation.Controllers
 {
     public class HomeController : Controller
     {
+        #region Métodos index
         [Authorize]
         public IActionResult Index()
         {
@@ -22,16 +23,37 @@ namespace ContasApp.Presentation.Controllers
                 ViewBag.Meses = ObterMeses();
                 ViewBag.Anos = ObterAnos();
                 ViewBag.ReceitasEDespesas = ObterReceitasEDespesas(model.mes.Value, model.ano.Value);
+                ViewBag.TotalCategorias = ObterTotalCategorias(model.mes.Value, model.ano.Value);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 TempData["MensagemErro"] = e.Message;
             }
-            
+
 
             return View(model);
         }
 
+        [HttpPost]
+        public IActionResult Index(DashboardViewModel model)
+        {           
+            try
+            {
+                ViewBag.Meses = ObterMeses();
+                ViewBag.Anos = ObterAnos();
+                ViewBag.ReceitasEDespesas = ObterReceitasEDespesas(model.mes.Value, model.ano.Value);
+                ViewBag.TotalCategorias = ObterTotalCategorias(model.mes.Value, model.ano.Value);
+            }
+            catch (Exception e)
+            {
+                TempData["MensagemErro"] = e.Message;
+            }
+
+            return View(model);
+        }
+        #endregion
+
+        #region Métodos do filtro de mês e ano
         private List<SelectListItem> ObterMeses()
         {
             var lista = new List<SelectListItem>();
@@ -64,12 +86,14 @@ namespace ContasApp.Presentation.Controllers
 
             return lista;
         }
+        #endregion
 
+        #region Métodos dos gráficos
         private List<object> ObterReceitasEDespesas(int mes, int ano)
         {
             var usuario = JsonConvert.DeserializeObject<Usuario>(User.Identity.Name);
             var contarepository = new ContaRepository();
-            
+
             var qtdDiasMes = DateTime.DaysInMonth(ano, mes);
             var dataInicio = new DateTime(ano, mes, 1);
             var dataFim = new DateTime(ano, mes, qtdDiasMes);
@@ -83,5 +107,24 @@ namespace ContasApp.Presentation.Controllers
 
             return lista;
         }
+
+        public List<object> ObterTotalCategorias(int mes, int ano)
+        {
+            var usuario = JsonConvert.DeserializeObject<Usuario>(User.Identity.Name);
+            var contarepository = new ContaRepository();
+
+            var qtdDiasMes = DateTime.DaysInMonth(ano, mes);
+            var dataInicio = new DateTime(ano, mes, 1);
+            var dataFim = new DateTime(ano, mes, qtdDiasMes);
+
+            var contas = contarepository.PesquisarDataUsuario(dataInicio, dataFim, usuario.Id);
+
+            var lista = contas.GroupBy(conta => conta.Categoria.Descricao).Select(grupo => new { Categoria = grupo.Key, Total = grupo.Sum(conta => conta.Valor) }).ToList();
+
+            return lista.Cast<object>().ToList();
+
+        }
+
+        #endregion
     }
 }
